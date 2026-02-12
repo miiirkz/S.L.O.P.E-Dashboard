@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoring Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+        h2 {
+            margin: 0 0 10px;
+        }
+        .info {
+            margin-top: 40px;
+            background: #e7e7e7;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>System Monitoring Dashboard</h1>
+    <div class="dashboard">
+        <div class="card">
+            <h2>CPU Usage</h2>
+            <p>XX%</p>
+        </div>
+        <div class="card">
+            <h2>Memory Usage</h2>
+            <p>XX GB / YY GB</p>
+        </div>
+        <div class="card">
+            <h2>Disk Usage</h2>
+            <p>XX GB / YY GB</p>
+        </div>
+        <div class="card">
+            <h2>Temperature</h2>
+            <p>XX °C</p>
+        </div>
+    </div>
+    <div class="info">
+        <h2>System Information</h2>
+        <p>Current Date and Time: 2026-02-12 15:05:08 UTC</p>
+    </div>
+</body>
+</html>
