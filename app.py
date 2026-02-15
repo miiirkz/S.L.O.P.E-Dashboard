@@ -26,8 +26,6 @@ alarm_config = {
     'notification_enabled': True
 }
 
-acknowledged_alarms = []
-
 def init_db():
     """Initialize the database with required tables"""
     conn = sqlite3.connect(DB_PATH)
@@ -146,12 +144,23 @@ def receive_sensor_data():
     try:
         data = request.json
         
-        moisture = data.get('moisture', 0)
-        accel_x = data.get('accel_x', 0)
-        accel_y = data.get('accel_y', 0)
-        accel_z = data.get('accel_z', 0)
-        vibration = data.get('vibration', 0)
-        tilt = data.get('tilt', 0)
+        # Extract and validate sensor data
+        moisture = float(data.get('moisture', 0))
+        accel_x = float(data.get('accel_x', 0))
+        accel_y = float(data.get('accel_y', 0))
+        accel_z = float(data.get('accel_z', 0))
+        vibration = float(data.get('vibration', 0))
+        tilt = float(data.get('tilt', 0))
+        
+        # Validate data ranges
+        if not (0 <= moisture <= 100):
+            return jsonify({'status': 'error', 'message': 'Moisture must be between 0 and 100'}), 400
+        if not (-2 <= accel_x <= 2 and -2 <= accel_y <= 2 and -2 <= accel_z <= 2):
+            return jsonify({'status': 'error', 'message': 'Acceleration values must be between -2g and 2g'}), 400
+        if not (0 <= vibration <= 2):
+            return jsonify({'status': 'error', 'message': 'Vibration must be between 0 and 2g'}), 400
+        if not (0 <= tilt <= 90):
+            return jsonify({'status': 'error', 'message': 'Tilt must be between 0 and 90 degrees'}), 400
         
         # Calculate risk
         risk = calculate_risk_level(moisture, vibration, tilt)

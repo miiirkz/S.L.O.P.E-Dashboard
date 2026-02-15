@@ -21,6 +21,8 @@
 #include <ArduinoJson.h>
 
 // WiFi Configuration
+// WARNING: Do not commit actual credentials to version control!
+// Consider using a separate config.h file that is gitignored
 const char* ssid = "YOUR_WIFI_SSID";
 const char* password = "YOUR_WIFI_PASSWORD";
 const char* serverUrl = "http://YOUR_SERVER_IP:5000/api/sensor-data";
