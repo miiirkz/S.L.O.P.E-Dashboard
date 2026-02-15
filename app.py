@@ -51,4 +51,6 @@ def handle_data():
         return jsonify(latest_data)
 
 if __name__ == '__main__':
+    # NOTE: For production, set debug=False and configure proper host/port
+    # For development only: debug=True, host='0.0.0.0' exposes server on all interfaces
     app.run(debug=True, host='0.0.0.0')

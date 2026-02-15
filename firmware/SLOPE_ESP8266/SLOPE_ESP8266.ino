@@ -29,7 +29,6 @@
 #define PIN_SDA          4   // D2 (GPIO4) - I2C Data
 #define PIN_VIBRATION    2   // D4 (GPIO2) - SW-420
 #define PIN_SOIL_DIGITAL 14  // D5 (GPIO14)
-#define PIN_SOIL_ANALOG  12  // D6 (GPIO12) - Not used, using A0
 #define PIN_SOIL_ADC     A0  // A0 - Analog input for soil moisture
 
 // ============================================================================
@@ -115,8 +114,10 @@ bool rapidTiltChange = false;
 
 // Buzzer timing
 unsigned long lastBuzzerToggle = 0;
+unsigned long buzzerBeepStartTime = 0;
 bool buzzerState = false;
 int buzzerBeepCount = 0;
+bool buzzerBeeping = false;
 
 // WiFi client
 WiFiClient wifiClient;
@@ -519,7 +520,7 @@ void updateLEDs() {
       digitalWrite(PIN_LED_YELLOW, HIGH);
       break;
     case RISK_ORANGE:
-    case RISK_CRITICAL:  // CRITICAL uses red LED but with continuous alarm
+    case RISK_CRITICAL:  // CRITICAL uses orange LED with continuous alarm
       digitalWrite(PIN_LED_ORANGE, HIGH);
       break;
     case RISK_RED:
@@ -538,21 +539,31 @@ void updateBuzzer() {
       digitalWrite(PIN_BUZZER, LOW);
       buzzerState = false;
       buzzerBeepCount = 0;
+      buzzerBeeping = false;
       break;
       
     case RISK_ORANGE:
-      // Beep-beep-beep pattern (1 second intervals)
-      if (currentTime - lastBuzzerToggle >= 1000) {
-        if (buzzerBeepCount < 3) {
-          // Short beep
-          digitalWrite(PIN_BUZZER, HIGH);
-          delay(100);
+      // Beep-beep-beep pattern (1 second intervals) - non-blocking
+      if (buzzerBeeping) {
+        // Currently in a beep, check if 100ms has passed
+        if (currentTime - buzzerBeepStartTime >= 100) {
           digitalWrite(PIN_BUZZER, LOW);
-          buzzerBeepCount++;
-        } else {
-          buzzerBeepCount = 0;
+          buzzerBeeping = false;
         }
-        lastBuzzerToggle = currentTime;
+      } else {
+        // Not beeping, check if it's time for next beep
+        if (currentTime - lastBuzzerToggle >= 1000) {
+          if (buzzerBeepCount < 3) {
+            // Start a short beep
+            digitalWrite(PIN_BUZZER, HIGH);
+            buzzerBeeping = true;
+            buzzerBeepStartTime = currentTime;
+            buzzerBeepCount++;
+          } else {
+            buzzerBeepCount = 0;
+          }
+          lastBuzzerToggle = currentTime;
+        }
       }
       break;
       
@@ -560,6 +571,7 @@ void updateBuzzer() {
     case RISK_CRITICAL:
       // Continuous alarm buzz
       digitalWrite(PIN_BUZZER, HIGH);
+      buzzerBeeping = false;
       break;
   }
 }

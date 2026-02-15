@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+*.egg-info/
+dist/
+build/
+
+# Flask
+instance/
+.webassets-cache
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Arduino/ESP8266
+*.o
+*.elf
+*.hex
+*.bin
+
+# Configuration (keep example files)
+firmware/config.h
+!firmware/config.h.example
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+temp/
