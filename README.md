@@ -95,6 +95,10 @@ Open your web browser and navigate to:
 http://localhost:5000
 ```
 
+**Note**: The dashboard uses Chart.js for data visualization. If you see "Charts require Chart.js library" messages, the CDN may be blocked by your network. The dashboard will still function fully with all data displayed in the sensor cards. For full chart functionality, you can:
+- Serve the page from a network that allows CDN access
+- Download Chart.js locally and update the script source in `templates/index.html`
+
 ### 3. Setup ESP8266 (Optional)
 
 See detailed instructions in [`arduino_firmware/README.md`](arduino_firmware/README.md)

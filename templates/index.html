@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>S.L.O.P.E Dashboard - Landslide Monitoring System</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 </head>
 <body>
     <div class="header">
@@ -168,9 +168,26 @@
         // Global variables
         let moistureChart, accelerationChart, vibrationChart, tiltChart, riskGauge;
         let sensorData = [];
+        const chartsEnabled = typeof Chart !== 'undefined';
         
         // Initialize charts
         function initCharts() {
+            if (!chartsEnabled) {
+                console.warn('Chart.js not loaded. Charts will not be displayed.');
+                document.querySelectorAll('.chart-card').forEach(card => {
+                    const canvas = card.querySelector('canvas');
+                    if (canvas) {
+                        canvas.style.display = 'none';
+                        const msg = document.createElement('p');
+                        msg.style.textAlign = 'center';
+                        msg.style.color = '#999';
+                        msg.textContent = 'Charts require Chart.js library';
+                        card.appendChild(msg);
+                    }
+                });
+                return;
+            }
+            
             // Moisture Chart
             const moistureCtx = document.getElementById('moistureChart').getContext('2d');
             moistureChart = new Chart(moistureCtx, {
@@ -358,20 +375,22 @@
             // Add appropriate class
             if (level === 'GREEN') {
                 riskBadge.classList.add('risk-green');
-                riskGauge.data.datasets[0].backgroundColor = ['#10b981', '#e5e7eb'];
+                if (chartsEnabled && riskGauge) riskGauge.data.datasets[0].backgroundColor = ['#10b981', '#e5e7eb'];
             } else if (level === 'YELLOW') {
                 riskBadge.classList.add('risk-yellow');
-                riskGauge.data.datasets[0].backgroundColor = ['#f59e0b', '#e5e7eb'];
+                if (chartsEnabled && riskGauge) riskGauge.data.datasets[0].backgroundColor = ['#f59e0b', '#e5e7eb'];
             } else if (level === 'ORANGE') {
                 riskBadge.classList.add('risk-orange');
-                riskGauge.data.datasets[0].backgroundColor = ['#f97316', '#e5e7eb'];
+                if (chartsEnabled && riskGauge) riskGauge.data.datasets[0].backgroundColor = ['#f97316', '#e5e7eb'];
             } else if (level === 'RED') {
                 riskBadge.classList.add('risk-red');
-                riskGauge.data.datasets[0].backgroundColor = ['#ef4444', '#e5e7eb'];
+                if (chartsEnabled && riskGauge) riskGauge.data.datasets[0].backgroundColor = ['#ef4444', '#e5e7eb'];
             }
 
-            riskGauge.data.datasets[0].data = [score, 100 - score];
-            riskGauge.update();
+            if (chartsEnabled && riskGauge) {
+                riskGauge.data.datasets[0].data = [score, 100 - score];
+                riskGauge.update();
+            }
         }
 
         // Update sensor status
@@ -400,6 +419,8 @@
 
         // Update charts
         function updateCharts(data) {
+            if (!chartsEnabled) return;
+            
             const maxPoints = 20;
             const recentData = data.slice(-maxPoints);
 
@@ -409,28 +430,36 @@
             });
 
             // Moisture Chart
-            moistureChart.data.labels = labels;
-            moistureChart.data.datasets[0].data = recentData.map(d => d.moisture);
-            moistureChart.data.datasets[1].data = new Array(labels.length).fill(45);
-            moistureChart.data.datasets[2].data = new Array(labels.length).fill(46);
-            moistureChart.update();
+            if (moistureChart) {
+                moistureChart.data.labels = labels;
+                moistureChart.data.datasets[0].data = recentData.map(d => d.moisture);
+                moistureChart.data.datasets[1].data = new Array(labels.length).fill(45);
+                moistureChart.data.datasets[2].data = new Array(labels.length).fill(46);
+                moistureChart.update();
+            }
 
             // Acceleration Chart
-            accelerationChart.data.labels = labels;
-            accelerationChart.data.datasets[0].data = recentData.map(d => d.accel_x);
-            accelerationChart.data.datasets[1].data = recentData.map(d => d.accel_y);
-            accelerationChart.data.datasets[2].data = recentData.map(d => d.accel_z);
-            accelerationChart.update();
+            if (accelerationChart) {
+                accelerationChart.data.labels = labels;
+                accelerationChart.data.datasets[0].data = recentData.map(d => d.accel_x);
+                accelerationChart.data.datasets[1].data = recentData.map(d => d.accel_y);
+                accelerationChart.data.datasets[2].data = recentData.map(d => d.accel_z);
+                accelerationChart.update();
+            }
 
             // Vibration Chart
-            vibrationChart.data.labels = labels;
-            vibrationChart.data.datasets[0].data = recentData.map(d => d.vibration);
-            vibrationChart.update();
+            if (vibrationChart) {
+                vibrationChart.data.labels = labels;
+                vibrationChart.data.datasets[0].data = recentData.map(d => d.vibration);
+                vibrationChart.update();
+            }
 
             // Tilt Chart
-            tiltChart.data.labels = labels;
-            tiltChart.data.datasets[0].data = recentData.map(d => d.tilt);
-            tiltChart.update();
+            if (tiltChart) {
+                tiltChart.data.labels = labels;
+                tiltChart.data.datasets[0].data = recentData.map(d => d.tilt);
+                tiltChart.update();
+            }
         }
 
         // Fetch data from API
