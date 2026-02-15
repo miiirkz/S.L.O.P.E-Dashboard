@@ -1,43 +1,527 @@
-/* CSS styling for the dashboard */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+/* Modern Professional Dashboard Styling */
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #333;
+    min-height: 100vh;
+}
+
+/* Header */
 .header {
-    background: #35424a;
-    color: #ffffff;
-    padding: 10px 0;
+    background: rgba(255, 255, 255, 0.95);
+    color: #333;
+    padding: 20px;
     text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.navbar {
-    display: flex;
-    justify-content: center;
-    background: #e8491d;
+.header h1 {
+    font-size: 2.5em;
+    margin-bottom: 5px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
-.navbar a {
-    color: white;
-    padding: 14px 20px;
-    text-decoration: none;
+.header p {
+    color: #666;
+    font-size: 1.1em;
 }
 
-.navbar a:hover {
-    background: #35424a;
-}
-
+/* Container */
 .container {
-    margin: 20px;
+    max-width: 1400px;
+    margin: 20px auto;
     padding: 20px;
-    background: white;
 }
 
+/* Risk Section */
+.risk-section {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.risk-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.risk-badge {
+    padding: 30px 60px;
+    border-radius: 20px;
+    font-size: 3em;
+    font-weight: bold;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.risk-badge.risk-green {
+    background: #10b981;
+    color: white;
+    animation: pulse-green 2s infinite;
+}
+
+.risk-badge.risk-yellow {
+    background: #f59e0b;
+    color: white;
+    animation: pulse-yellow 2s infinite;
+}
+
+.risk-badge.risk-orange {
+    background: #f97316;
+    color: white;
+    animation: pulse-orange 1.5s infinite;
+}
+
+.risk-badge.risk-red {
+    background: #ef4444;
+    color: white;
+    animation: pulse-red 1s infinite;
+}
+
+@keyframes pulse-green {
+    0%, 100% { transform: scale(1); box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4); }
+    50% { transform: scale(1.05); box-shadow: 0 10px 25px rgba(16, 185, 129, 0.6); }
+}
+
+@keyframes pulse-yellow {
+    0%, 100% { transform: scale(1); box-shadow: 0 5px 15px rgba(245, 158, 11, 0.4); }
+    50% { transform: scale(1.05); box-shadow: 0 10px 25px rgba(245, 158, 11, 0.6); }
+}
+
+@keyframes pulse-orange {
+    0%, 100% { transform: scale(1); box-shadow: 0 5px 15px rgba(249, 115, 22, 0.4); }
+    50% { transform: scale(1.05); box-shadow: 0 10px 25px rgba(249, 115, 22, 0.6); }
+}
+
+@keyframes pulse-red {
+    0%, 100% { transform: scale(1); box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4); }
+    50% { transform: scale(1.08); box-shadow: 0 15px 35px rgba(239, 68, 68, 0.7); }
+}
+
+.risk-score {
+    position: relative;
+    width: 250px;
+    height: 150px;
+}
+
+.score-text {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.score-text span:first-child {
+    display: block;
+    font-size: 3em;
+    font-weight: bold;
+    color: #333;
+}
+
+.score-label {
+    display: block;
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* Sensor Grid */
+.sensor-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.sensor-card {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sensor-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.sensor-icon {
+    font-size: 3em;
+    margin-bottom: 10px;
+}
+
+.sensor-card h3 {
+    color: #666;
+    font-size: 1em;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.sensor-value {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.sensor-value .unit {
+    font-size: 0.5em;
+    color: #999;
+}
+
+.sensor-status {
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.status-green {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.status-yellow {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-orange {
+    background: #fed7aa;
+    color: #9a3412;
+}
+
+.status-red {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* Charts Grid */
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.chart-card {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.chart-card h3 {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 1.2em;
+}
+
+.chart-card canvas {
+    max-height: 300px;
+}
+
+/* Configuration Section */
+.config-section {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.config-section h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.config-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.config-item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.config-item label {
+    color: #666;
+    font-weight: 600;
+}
+
+.config-item input[type="range"] {
+    width: 100%;
+    height: 8px;
+    border-radius: 5px;
+    background: #e5e7eb;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.config-item input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #667eea;
+    cursor: pointer;
+}
+
+.config-item input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #667eea;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* Alarms Section */
+.alarms-section, .history-section {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.alarms-section h2, .history-section h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.alarms-list, .history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.alarm-item {
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 5px solid;
+    background: #f9fafb;
+}
+
+.alarm-item.severity-red {
+    border-left-color: #ef4444;
+    background: #fef2f2;
+}
+
+.alarm-item.severity-orange {
+    border-left-color: #f97316;
+    background: #fff7ed;
+}
+
+.alarm-item.severity-yellow {
+    border-left-color: #f59e0b;
+    background: #fffbeb;
+}
+
+.alarm-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.alarm-type {
+    font-weight: 600;
+    color: #333;
+}
+
+.alarm-severity {
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    font-weight: bold;
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.alarm-message {
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.alarm-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.alarm-time {
+    font-size: 0.85em;
+    color: #999;
+}
+
+.btn-ack {
+    background: #10b981;
+    color: white;
+    border: none;
+    padding: 6px 15px;
+    border-radius: 15px;
+    font-size: 0.85em;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn-ack:hover {
+    background: #059669;
+}
+
+.history-item {
+    padding: 15px;
+    border-radius: 10px;
+    background: #f9fafb;
+    border-left: 3px solid #d1d5db;
+}
+
+.history-item.acknowledged {
+    opacity: 0.6;
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.history-type {
+    font-weight: 600;
+    color: #333;
+}
+
+.history-severity {
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.history-severity.severity-red {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.history-severity.severity-orange {
+    background: #fed7aa;
+    color: #9a3412;
+}
+
+.history-severity.severity-yellow {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.history-message {
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.history-time {
+    font-size: 0.8em;
+    color: #999;
+}
+
+.no-alarms, .no-history {
+    text-align: center;
+    color: #999;
+    padding: 20px;
+}
+
+/* Footer */
 .footer {
+    background: rgba(255, 255, 255, 0.95);
+    color: #666;
     text-align: center;
     padding: 20px;
-    background: #35424a;
-    color: white;
+    margin-top: 30px;
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.footer p {
+    margin: 5px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 1.8em;
+    }
+
+    .risk-indicator {
+        flex-direction: column;
+    }
+
+    .sensor-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .config-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+
+    .risk-badge {
+        padding: 20px 40px;
+        font-size: 2em;
+    }
+
+    .sensor-value {
+        font-size: 2em;
+    }
 }
