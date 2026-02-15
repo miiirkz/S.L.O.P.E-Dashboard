@@ -1,0 +1,116 @@
+/*
+ * Configuration Template for S.L.O.P.E ESP8266 Firmware
+ * 
+ * Copy this file and rename to config.h, then update with your actual values
+ */
+
+#ifndef CONFIG_H
+#define CONFIG_H
+
+// ============================================================================
+// WiFi Configuration
+// ============================================================================
+// Replace with your WiFi network credentials
+#define WIFI_SSID "YOUR_WIFI_SSID"
+#define WIFI_PASSWORD "YOUR_WIFI_PASSWORD"
+
+// ============================================================================
+// Server Configuration
+// ============================================================================
+// Replace with your Flask server IP address and port
+// Example: "http://192.168.1.100:5000/api/data"
+#define SERVER_URL "http://YOUR_SERVER_IP:5000/api/data"
+
+// ============================================================================
+// Sensor Calibration (Optional)
+// ============================================================================
+// Adjust these if your sensors need calibration
+
+// Soil moisture sensor calibration
+// These values map the analog reading to moisture percentage
+#define SOIL_SENSOR_DRY 1023    // Analog value when completely dry
+#define SOIL_SENSOR_WET 0       // Analog value when fully wet
+
+// MPU6050 accelerometer sensitivity
+// Default: 16384 LSB/g (±2g range)
+#define MPU6050_ACCEL_SCALE 16384.0
+
+// ============================================================================
+// Timing Configuration (Optional)
+// ============================================================================
+// Adjust sensor reading and transmission intervals if needed
+
+// How often to read sensors (milliseconds)
+#define SENSOR_INTERVAL 2000
+
+// How long high moisture must persist for critical alert (milliseconds)
+// Default: 1800000 = 30 minutes
+#define SUSTAINED_THRESHOLD 1800000
+
+// Interval for rate of change checks (milliseconds)
+#define RATE_CHECK_INTERVAL 10000
+
+// ============================================================================
+// Risk Threshold Configuration (Optional)
+// ============================================================================
+// Fine-tune risk level thresholds for your environment
+
+// Soil Moisture Thresholds (percentage)
+#define THRESHOLD_SOIL_GREEN    20.0
+#define THRESHOLD_SOIL_YELLOW   35.0
+#define THRESHOLD_SOIL_ORANGE   45.0
+#define THRESHOLD_SOIL_CRITICAL 40.0
+
+// Vibration Thresholds (g-force)
+#define THRESHOLD_VIB_GREEN     0.02
+#define THRESHOLD_VIB_YELLOW    0.08
+#define THRESHOLD_VIB_ORANGE    0.20
+
+// Tilt Angle Thresholds (degrees)
+#define THRESHOLD_TILT_GREEN    2.0
+#define THRESHOLD_TILT_YELLOW   5.0
+#define THRESHOLD_TILT_ORANGE   10.0
+
+// Critical rate of change threshold (degrees per 10 seconds)
+#define THRESHOLD_TILT_RATE     5.0
+
+// Hysteresis margin (percentage)
+#define HYSTERESIS_PERCENT      0.02
+
+// ============================================================================
+// Hardware Configuration (Optional)
+// ============================================================================
+// Change these only if you modify the pin connections
+
+// LED Pins
+#define PIN_LED_GREEN_CUSTOM    16  // D0
+#define PIN_LED_YELLOW_CUSTOM   0   // D3
+#define PIN_LED_ORANGE_CUSTOM   13  // D7
+#define PIN_LED_RED_CUSTOM      15  // D8
+
+// Buzzer Pin
+#define PIN_BUZZER_CUSTOM       3   // RX
+
+// I2C Pins (for MPU6050)
+#define PIN_SCL_CUSTOM          5   // D1
+#define PIN_SDA_CUSTOM          4   // D2
+
+// Sensor Pins
+#define PIN_VIBRATION_CUSTOM    2   // D4
+#define PIN_SOIL_DIGITAL_CUSTOM 14  // D5
+
+// MPU6050 I2C Address
+// Default: 0x68 (when AD0 pin is LOW)
+// Alternative: 0x69 (when AD0 pin is HIGH)
+#define MPU6050_ADDRESS         0x68
+
+// ============================================================================
+// Debug Configuration
+// ============================================================================
+// Enable/disable debug output to serial monitor
+#define DEBUG_ENABLED true
+
+// Serial baud rate
+#define SERIAL_BAUD 115200
+
+#endif // CONFIG_H
