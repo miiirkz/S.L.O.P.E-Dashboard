@@ -16,6 +16,10 @@ build/
 instance/
 .webassets-cache
 
+# Environment variables
+.env
+!.env.example
+
 # IDE
 .vscode/
 .idea/

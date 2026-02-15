@@ -63,11 +63,15 @@ Detailed instructions: [`firmware/README.md`](firmware/README.md)
 # Install Python dependencies
 pip install -r requirements.txt
 
+# (Optional) Configure environment for production
+cp .env.example .env
+# Edit .env and set FLASK_DEBUG=0, FLASK_HOST=127.0.0.1
+
 # Run Flask server
 python app.py
 ```
 
-Server will start on `http://0.0.0.0:5000`
+Server will start on `http://0.0.0.0:5000` (development) or configured host/port
 
 ### 4. Test the System
 

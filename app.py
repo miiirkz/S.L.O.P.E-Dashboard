@@ -51,6 +51,12 @@ def handle_data():
         return jsonify(latest_data)
 
 if __name__ == '__main__':
-    # NOTE: For production, set debug=False and configure proper host/port
-    # For development only: debug=True, host='0.0.0.0' exposes server on all interfaces
-    app.run(debug=True, host='0.0.0.0')
+    # Use environment variable to control debug mode
+    # For production: export FLASK_DEBUG=0 or FLASK_ENV=production
+    # For development: export FLASK_DEBUG=1 or omit (defaults to True)
+    import os
+    debug_mode = os.environ.get('FLASK_DEBUG', '1') == '1'
+    host = os.environ.get('FLASK_HOST', '0.0.0.0')
+    port = int(os.environ.get('FLASK_PORT', '5000'))
+    
+    app.run(debug=debug_mode, host=host, port=port)
