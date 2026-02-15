@@ -3,60 +3,666 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitoring Dashboard</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
-        .dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-        }
-        .card {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            text-align: center;
-        }
-        h2 {
-            margin: 0 0 10px;
-        }
-        .info {
-            margin-top: 40px;
-            background: #e7e7e7;
-            padding: 10px;
-            border-radius: 5px;
-        }
-    </style>
+    <title>S.L.O.P.E Dashboard - Landslide Monitoring System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 </head>
 <body>
-    <h1>System Monitoring Dashboard</h1>
-    <div class="dashboard">
-        <div class="card">
-            <h2>CPU Usage</h2>
-            <p>XX%</p>
+    <div class="header">
+        <h1>🏔️ S.L.O.P.E Dashboard</h1>
+        <p>Soil Landslide Observation & Prediction Engine</p>
+    </div>
+
+    <div class="container">
+        <!-- Risk Indicator Section -->
+        <div class="risk-section">
+            <div class="risk-indicator" id="risk-indicator">
+                <div class="risk-badge" id="risk-badge">
+                    <span class="risk-text" id="risk-text">GREEN</span>
+                </div>
+                <div class="risk-score">
+                    <canvas id="riskGauge"></canvas>
+                    <div class="score-text">
+                        <span id="risk-score-value">0</span>
+                        <span class="score-label">Risk Score</span>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="card">
-            <h2>Memory Usage</h2>
-            <p>XX GB / YY GB</p>
+
+        <!-- Sensor Data Cards -->
+        <div class="sensor-grid">
+            <div class="sensor-card">
+                <div class="sensor-icon">💧</div>
+                <h3>Soil Moisture</h3>
+                <div class="sensor-value">
+                    <span id="moisture-value">--</span>
+                    <span class="unit">%</span>
+                </div>
+                <div class="sensor-status" id="moisture-status">GREEN</div>
+            </div>
+
+            <div class="sensor-card">
+                <div class="sensor-icon">📊</div>
+                <h3>Acceleration X</h3>
+                <div class="sensor-value">
+                    <span id="accel-x-value">--</span>
+                    <span class="unit">g</span>
+                </div>
+            </div>
+
+            <div class="sensor-card">
+                <div class="sensor-icon">📊</div>
+                <h3>Acceleration Y</h3>
+                <div class="sensor-value">
+                    <span id="accel-y-value">--</span>
+                    <span class="unit">g</span>
+                </div>
+            </div>
+
+            <div class="sensor-card">
+                <div class="sensor-icon">📊</div>
+                <h3>Acceleration Z</h3>
+                <div class="sensor-value">
+                    <span id="accel-z-value">--</span>
+                    <span class="unit">g</span>
+                </div>
+            </div>
+
+            <div class="sensor-card">
+                <div class="sensor-icon">〰️</div>
+                <h3>Vibration</h3>
+                <div class="sensor-value">
+                    <span id="vibration-value">--</span>
+                    <span class="unit">g</span>
+                </div>
+                <div class="sensor-status" id="vibration-status">GREEN</div>
+            </div>
+
+            <div class="sensor-card">
+                <div class="sensor-icon">📐</div>
+                <h3>Tilt Angle</h3>
+                <div class="sensor-value">
+                    <span id="tilt-value">--</span>
+                    <span class="unit">°</span>
+                </div>
+                <div class="sensor-status" id="tilt-status">GREEN</div>
+            </div>
         </div>
-        <div class="card">
-            <h2>Disk Usage</h2>
-            <p>XX GB / YY GB</p>
+
+        <!-- Charts Section -->
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3>Soil Moisture Over Time</h3>
+                <canvas id="moistureChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>Acceleration Trends</h3>
+                <canvas id="accelerationChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>Vibration Timeline</h3>
+                <canvas id="vibrationChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>Tilt Angle Visualization</h3>
+                <canvas id="tiltChart"></canvas>
+            </div>
         </div>
-        <div class="card">
-            <h2>Temperature</h2>
-            <p>XX °C</p>
+
+        <!-- Alarm Configuration Panel -->
+        <div class="config-section">
+            <h2>⚙️ Alarm Configuration</h2>
+            <div class="config-grid">
+                <div class="config-item">
+                    <label for="moisture-threshold">Moisture Threshold (%):</label>
+                    <input type="range" id="moisture-threshold" min="0" max="100" value="45">
+                    <span id="moisture-threshold-value">45</span>%
+                </div>
+                <div class="config-item">
+                    <label for="vibration-threshold">Vibration Threshold (g):</label>
+                    <input type="range" id="vibration-threshold" min="0" max="0.5" step="0.01" value="0.20">
+                    <span id="vibration-threshold-value">0.20</span>g
+                </div>
+                <div class="config-item">
+                    <label for="tilt-threshold">Tilt Threshold (°):</label>
+                    <input type="range" id="tilt-threshold" min="0" max="30" value="10">
+                    <span id="tilt-threshold-value">10</span>°
+                </div>
+                <div class="config-item">
+                    <label>
+                        <input type="checkbox" id="notification-enabled" checked>
+                        Enable Notifications
+                    </label>
+                </div>
+            </div>
+            <button class="btn-primary" id="save-config">Save Configuration</button>
+        </div>
+
+        <!-- Active Alarms Section -->
+        <div class="alarms-section">
+            <h2>🚨 Active Alarms</h2>
+            <div id="active-alarms" class="alarms-list">
+                <p class="no-alarms">No active alarms</p>
+            </div>
+        </div>
+
+        <!-- Alarm History -->
+        <div class="history-section">
+            <h2>📋 Alarm History</h2>
+            <div id="alarm-history" class="history-list">
+                <p class="no-history">No alarm history</p>
+            </div>
         </div>
     </div>
-    <div class="info">
-        <h2>System Information</h2>
-        <p>Current Date and Time: 2026-02-12 15:05:08 UTC</p>
+
+    <div class="footer">
+        <p>Last Updated: <span id="last-update">--</span></p>
+        <p>S.L.O.P.E Dashboard © 2026 - Real-time Landslide Monitoring System</p>
     </div>
+
+    <script>
+        // Global variables
+        let moistureChart, accelerationChart, vibrationChart, tiltChart, riskGauge;
+        let sensorData = [];
+        const chartsEnabled = typeof Chart !== 'undefined';
+        
+        // Initialize charts
+        function initCharts() {
+            if (!chartsEnabled) {
+                console.warn('Chart.js not loaded. Charts will not be displayed.');
+                document.querySelectorAll('.chart-card').forEach(card => {
+                    const canvas = card.querySelector('canvas');
+                    if (canvas) {
+                        canvas.style.display = 'none';
+                        const msg = document.createElement('p');
+                        msg.style.textAlign = 'center';
+                        msg.style.color = '#999';
+                        msg.textContent = 'Charts require Chart.js library';
+                        card.appendChild(msg);
+                    }
+                });
+                return;
+            }
+            
+            // Moisture Chart
+            const moistureCtx = document.getElementById('moistureChart').getContext('2d');
+            moistureChart = new Chart(moistureCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Moisture %',
+                        data: [],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Orange Threshold',
+                        data: [],
+                        borderColor: '#f97316',
+                        borderDash: [5, 5],
+                        pointRadius: 0,
+                        fill: false
+                    }, {
+                        label: 'Red Threshold',
+                        data: [],
+                        borderColor: '#ef4444',
+                        borderDash: [5, 5],
+                        pointRadius: 0,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+
+            // Acceleration Chart
+            const accelCtx = document.getElementById('accelerationChart').getContext('2d');
+            accelerationChart = new Chart(accelCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Accel X',
+                        data: [],
+                        borderColor: '#ef4444',
+                        tension: 0.4
+                    }, {
+                        label: 'Accel Y',
+                        data: [],
+                        borderColor: '#10b981',
+                        tension: 0.4
+                    }, {
+                        label: 'Accel Z',
+                        data: [],
+                        borderColor: '#3b82f6',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+
+            // Vibration Chart
+            const vibrationCtx = document.getElementById('vibrationChart').getContext('2d');
+            vibrationChart = new Chart(vibrationCtx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Vibration (g)',
+                        data: [],
+                        backgroundColor: '#8b5cf6'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Tilt Chart
+            const tiltCtx = document.getElementById('tiltChart').getContext('2d');
+            tiltChart = new Chart(tiltCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Tilt Angle (°)',
+                        data: [],
+                        borderColor: '#f59e0b',
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Risk Gauge
+            const gaugeCtx = document.getElementById('riskGauge').getContext('2d');
+            riskGauge = new Chart(gaugeCtx, {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [0, 100],
+                        backgroundColor: ['#10b981', '#e5e7eb'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    circumference: 180,
+                    rotation: 270,
+                    cutout: '75%',
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update sensor data
+        function updateSensorData(data) {
+            if (!data || data.length === 0) return;
+
+            const latest = data[data.length - 1];
+            
+            // Update sensor values
+            document.getElementById('moisture-value').textContent = latest.moisture ? latest.moisture.toFixed(1) : '--';
+            document.getElementById('accel-x-value').textContent = latest.accel_x ? latest.accel_x.toFixed(3) : '--';
+            document.getElementById('accel-y-value').textContent = latest.accel_y ? latest.accel_y.toFixed(3) : '--';
+            document.getElementById('accel-z-value').textContent = latest.accel_z ? latest.accel_z.toFixed(3) : '--';
+            document.getElementById('vibration-value').textContent = latest.vibration ? latest.vibration.toFixed(3) : '--';
+            document.getElementById('tilt-value').textContent = latest.tilt ? latest.tilt.toFixed(1) : '--';
+
+            // Update risk indicator
+            updateRiskIndicator(latest.risk_level, latest.risk_score);
+
+            // Update charts
+            updateCharts(data);
+
+            // Update timestamp
+            document.getElementById('last-update').textContent = new Date(latest.timestamp).toLocaleString();
+        }
+
+        // Update risk indicator
+        function updateRiskIndicator(level, score) {
+            const riskBadge = document.getElementById('risk-badge');
+            const riskText = document.getElementById('risk-text');
+            const riskScoreValue = document.getElementById('risk-score-value');
+
+            riskText.textContent = level;
+            riskScoreValue.textContent = score;
+
+            // Remove all risk classes
+            riskBadge.classList.remove('risk-green', 'risk-yellow', 'risk-orange', 'risk-red');
+
+            // Add appropriate class
+            if (level === 'GREEN') {
+                riskBadge.classList.add('risk-green');
+                if (chartsEnabled && riskGauge) riskGauge.data.datasets[0].backgroundColor = ['#10b981', '#e5e7eb'];
+            } else if (level === 'YELLOW') {
+                riskBadge.classList.add('risk-yellow');
+                if (chartsEnabled && riskGauge) riskGauge.data.datasets[0].backgroundColor = ['#f59e0b', '#e5e7eb'];
+            } else if (level === 'ORANGE') {
+                riskBadge.classList.add('risk-orange');
+                if (chartsEnabled && riskGauge) riskGauge.data.datasets[0].backgroundColor = ['#f97316', '#e5e7eb'];
+            } else if (level === 'RED') {
+                riskBadge.classList.add('risk-red');
+                if (chartsEnabled && riskGauge) riskGauge.data.datasets[0].backgroundColor = ['#ef4444', '#e5e7eb'];
+            }
+
+            if (chartsEnabled && riskGauge) {
+                riskGauge.data.datasets[0].data = [score, 100 - score];
+                riskGauge.update();
+            }
+        }
+
+        // Update sensor status
+        function updateSensorStatus(status) {
+            if (!status) return;
+
+            const moistureStatus = document.getElementById('moisture-status');
+            const vibrationStatus = document.getElementById('vibration-status');
+            const tiltStatus = document.getElementById('tilt-status');
+
+            if (status.moisture) {
+                moistureStatus.textContent = status.moisture.risk;
+                moistureStatus.className = 'sensor-status status-' + status.moisture.risk.toLowerCase();
+            }
+
+            if (status.vibration) {
+                vibrationStatus.textContent = status.vibration.risk;
+                vibrationStatus.className = 'sensor-status status-' + status.vibration.risk.toLowerCase();
+            }
+
+            if (status.tilt) {
+                tiltStatus.textContent = status.tilt.risk;
+                tiltStatus.className = 'sensor-status status-' + status.tilt.risk.toLowerCase();
+            }
+        }
+
+        // Update charts
+        function updateCharts(data) {
+            if (!chartsEnabled) return;
+            
+            const maxPoints = 20;
+            const recentData = data.slice(-maxPoints);
+
+            const labels = recentData.map(d => {
+                const date = new Date(d.timestamp);
+                return date.toLocaleTimeString();
+            });
+
+            // Moisture Chart
+            if (moistureChart) {
+                moistureChart.data.labels = labels;
+                moistureChart.data.datasets[0].data = recentData.map(d => d.moisture);
+                moistureChart.data.datasets[1].data = new Array(labels.length).fill(45);
+                moistureChart.data.datasets[2].data = new Array(labels.length).fill(46);
+                moistureChart.update();
+            }
+
+            // Acceleration Chart
+            if (accelerationChart) {
+                accelerationChart.data.labels = labels;
+                accelerationChart.data.datasets[0].data = recentData.map(d => d.accel_x);
+                accelerationChart.data.datasets[1].data = recentData.map(d => d.accel_y);
+                accelerationChart.data.datasets[2].data = recentData.map(d => d.accel_z);
+                accelerationChart.update();
+            }
+
+            // Vibration Chart
+            if (vibrationChart) {
+                vibrationChart.data.labels = labels;
+                vibrationChart.data.datasets[0].data = recentData.map(d => d.vibration);
+                vibrationChart.update();
+            }
+
+            // Tilt Chart
+            if (tiltChart) {
+                tiltChart.data.labels = labels;
+                tiltChart.data.datasets[0].data = recentData.map(d => d.tilt);
+                tiltChart.update();
+            }
+        }
+
+        // Fetch data from API
+        async function fetchData() {
+            try {
+                const response = await fetch('/api/data');
+                const result = await response.json();
+                
+                if (result.data) {
+                    sensorData = result.data;
+                    updateSensorData(sensorData);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        // Fetch sensor status
+        async function fetchSensorStatus() {
+            try {
+                const response = await fetch('/api/sensor-status');
+                const status = await response.json();
+                updateSensorStatus(status);
+            } catch (error) {
+                console.error('Error fetching sensor status:', error);
+            }
+        }
+
+        // Fetch active alarms
+        async function fetchActiveAlarms() {
+            try {
+                const response = await fetch('/api/alarms/active');
+                const alarms = await response.json();
+                
+                const container = document.getElementById('active-alarms');
+                
+                if (alarms.length === 0) {
+                    container.innerHTML = '<p class="no-alarms">No active alarms</p>';
+                } else {
+                    container.innerHTML = alarms.map(alarm => `
+                        <div class="alarm-item severity-${alarm.severity.toLowerCase()}">
+                            <div class="alarm-header">
+                                <span class="alarm-type">${alarm.alarm_type}</span>
+                                <span class="alarm-severity">${alarm.severity}</span>
+                            </div>
+                            <div class="alarm-message">${alarm.message}</div>
+                            <div class="alarm-footer">
+                                <span class="alarm-time">${new Date(alarm.timestamp).toLocaleString()}</span>
+                                <button class="btn-ack" onclick="acknowledgeAlarm(${alarm.id})">Acknowledge</button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error fetching active alarms:', error);
+            }
+        }
+
+        // Fetch alarm history
+        async function fetchAlarmHistory() {
+            try {
+                const response = await fetch('/api/alarms/history');
+                const alarms = await response.json();
+                
+                const container = document.getElementById('alarm-history');
+                
+                if (alarms.length === 0) {
+                    container.innerHTML = '<p class="no-history">No alarm history</p>';
+                } else {
+                    container.innerHTML = alarms.slice(0, 10).map(alarm => `
+                        <div class="history-item ${alarm.acknowledged ? 'acknowledged' : ''}">
+                            <div class="history-header">
+                                <span class="history-type">${alarm.alarm_type}</span>
+                                <span class="history-severity severity-${alarm.severity.toLowerCase()}">${alarm.severity}</span>
+                            </div>
+                            <div class="history-message">${alarm.message}</div>
+                            <div class="history-time">${new Date(alarm.timestamp).toLocaleString()}</div>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error fetching alarm history:', error);
+            }
+        }
+
+        // Acknowledge alarm
+        async function acknowledgeAlarm(alarmId) {
+            try {
+                const response = await fetch('/api/alarms/acknowledge', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ alarm_id: alarmId })
+                });
+                
+                if (response.ok) {
+                    fetchActiveAlarms();
+                    fetchAlarmHistory();
+                }
+            } catch (error) {
+                console.error('Error acknowledging alarm:', error);
+            }
+        }
+
+        // Save alarm configuration
+        document.getElementById('save-config').addEventListener('click', async () => {
+            const config = {
+                moisture_threshold: parseFloat(document.getElementById('moisture-threshold').value),
+                vibration_threshold: parseFloat(document.getElementById('vibration-threshold').value),
+                tilt_threshold: parseFloat(document.getElementById('tilt-threshold').value),
+                notification_enabled: document.getElementById('notification-enabled').checked
+            };
+
+            try {
+                const response = await fetch('/api/alarms/config', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(config)
+                });
+
+                if (response.ok) {
+                    // Show success message
+                    showNotification('Configuration saved successfully!', 'success');
+                } else {
+                    showNotification('Failed to save configuration', 'error');
+                }
+            } catch (error) {
+                console.error('Error saving configuration:', error);
+                showNotification('Error saving configuration', 'error');
+            }
+        });
+
+        // Show notification function
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 25px;
+                background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+                color: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                z-index: 10000;
+                animation: slideIn 0.3s ease-out;
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Add notification animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(400px); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(400px); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Update threshold display values
+        document.getElementById('moisture-threshold').addEventListener('input', (e) => {
+            document.getElementById('moisture-threshold-value').textContent = e.target.value;
+        });
+
+        document.getElementById('vibration-threshold').addEventListener('input', (e) => {
+            document.getElementById('vibration-threshold-value').textContent = e.target.value;
+        });
+
+        document.getElementById('tilt-threshold').addEventListener('input', (e) => {
+            document.getElementById('tilt-threshold-value').textContent = e.target.value;
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            fetchData();
+            fetchSensorStatus();
+            fetchActiveAlarms();
+            fetchAlarmHistory();
+
+            // Auto-refresh every 5 seconds
+            setInterval(() => {
+                fetchData();
+                fetchSensorStatus();
+                fetchActiveAlarms();
+                fetchAlarmHistory();
+            }, 5000);
+        });
+    </script>
 </body>
 </html>
