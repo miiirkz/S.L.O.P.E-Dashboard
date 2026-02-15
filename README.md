@@ -84,9 +84,14 @@ pip install -r requirements.txt
 
 # Run the server
 python app.py
+
+# For development with debug mode (not for production):
+# FLASK_DEBUG=true python app.py
 ```
 
 The server will start on `http://localhost:5000`
+
+**Security Note**: Debug mode is disabled by default. Only enable it for development by setting the `FLASK_DEBUG=true` environment variable.
 
 ### 2. Access Dashboard
 
