@@ -5,7 +5,7 @@ Complete Arduino firmware for the ESP32-based landslide monitoring system with r
 ## Hardware Requirements
 
 ### Microcontroller
-- **ESP32 Development Board** (5GHz WiFi capable)
+- **ESP32 Development Board** (2.4GHz WiFi 802.11 b/g/n)
 
 ### Display
 - **TFT Display**: ILI9341 2.4" 240x320 SPI
@@ -180,7 +180,7 @@ const char* SERVER_URL = "http://YOUR_SERVER_IP:5000/api/sensor-data";
 - Non-blocking alert implementation
 
 ### 5. WiFi Connectivity
-- Automatic connection to 5GHz WiFi
+- Automatic connection to 2.4GHz WiFi (802.11 b/g/n)
 - JSON data transmission to Flask backend every 5 seconds
 - Auto-reconnection on connection loss
 - Graceful offline mode if WiFi unavailable
@@ -254,8 +254,7 @@ Data sent to Flask backend:
 
 ### WiFi Connection Failed
 - Verify SSID and password
-- Check 5GHz band support on router
-- Try 2.4GHz network first
+- Ensure router is configured for 2.4GHz (ESP32 does not support 5GHz)
 - Check signal strength
 - Verify ESP32 board with WiFi capability
 

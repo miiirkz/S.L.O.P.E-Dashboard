@@ -74,7 +74,7 @@ This project consists of two main components:
 ## Hardware Requirements
 
 ### ESP32 System Components
-- ESP32 Development Board (5GHz WiFi capable)
+- ESP32 Development Board (2.4GHz WiFi 802.11 b/g/n)
 - ILI9341 TFT Display (2.4" 240x320, SPI)
 - MPU6050 Accelerometer/Gyroscope (I2C)
 - Soil Moisture Sensor (Digital + Analog)

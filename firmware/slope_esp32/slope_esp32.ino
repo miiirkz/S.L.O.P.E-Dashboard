@@ -8,7 +8,7 @@
  * - SW-420 Vibration Sensor: D4
  * - Status LEDs: D0 (GREEN), D3 (YELLOW), D7 (ORANGE), D8 (RED)
  * - Buzzer: GPIO3 (RX)
- * - WiFi: 5GHz capable
+ * - WiFi: 2.4GHz (802.11 b/g/n)
  */
 
 #include <Wire.h>
@@ -302,6 +302,11 @@ void displayStartupComplete() {
 void readSensors() {
   // Read soil moisture
   int soilAnalog = analogRead(SOIL_ANALOG_PIN);
+  // Note: Mapping depends on sensor type. Capacitive sensors typically read:
+  // - High values (near 4095) when dry/in air
+  // - Low values (near 0) when wet/in water
+  // This mapping converts dry=high to moisture%=low (inverted for intuitive display)
+  // Adjust mapping direction if your sensor works differently
   currentData.soilMoisture = map(soilAnalog, 4095, 0, 0, 100); // ESP32 ADC is 12-bit (0-4095)
   currentData.soilMoisture = constrain(currentData.soilMoisture, 0, 100);
   

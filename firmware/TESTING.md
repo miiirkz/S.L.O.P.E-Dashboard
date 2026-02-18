@@ -362,7 +362,7 @@ IP address: [IP]
 ### Troubleshooting:
 - **WiFi won't connect**: 
   - Check SSID/password
-  - Verify 5GHz band or switch to 2.4GHz
+  - Verify router is using 2.4GHz (ESP32 does not support 5GHz)
   - Check router settings
 - **Data not received**:
   - Verify server URL in firmware
@@ -544,7 +544,7 @@ WiFi Status: CONNECTED
 - **Test**: Manual LED control
 
 ### WiFi Won't Connect
-- **Try**: 2.4GHz network instead of 5GHz
+- **Use**: 2.4GHz WiFi network (ESP32 does not support 5GHz)
 - **Check**: SSID/password for typos
 - **Verify**: ESP32 WiFi capability
 - **Test**: ESP32 WiFi example sketch
