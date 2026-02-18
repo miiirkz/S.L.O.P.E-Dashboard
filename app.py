@@ -70,4 +70,7 @@ def get_sensor_data():
 
 if __name__ == '__main__':
     # Run on all network interfaces to accept ESP32 connections
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    # Note: debug=True is only for development. Set to False in production.
+    import os
+    debug_mode = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
+    app.run(host='0.0.0.0', port=5000, debug=debug_mode)
