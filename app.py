@@ -1,16 +1,12 @@
-from flask import Flask, jsonify, render_template
-from flask_cors import CORS
+from flask import Flask, request, jsonify
+import json
 
 app = Flask(__name__)
-CORS(app)
 
-@app.route('/')
-def index():
-    return render_template('index.html')  # assuming you have an index.html file
-
-@app.route('/api/data')
-def get_data():
-    data = {"key": "value"}  # replace with your actual data
+@app.route('/soil-moisture', methods=['GET'])
+def get_soil_moisture():
+    # Logic to fetch soil moisture data
+    data = {'moisture': 35}  # Sample data
     return jsonify(data)
 
 if __name__ == '__main__':
